@@ -420,6 +420,10 @@ public class GoogleHadoopFileSystemConfiguration {
   public static final HadoopConfigurationProperty<RedactedString> GCS_ENCRYPTION_KEY_HASH =
       new HadoopConfigurationProperty<>("fs.gs.encryption.key.hash");
 
+  /** Configuration key for enabling the debug logging under the com.google package. */
+  public static final HadoopConfigurationProperty<Boolean> GCS_ENABLE_DEBUG_LOGGING =
+      new HadoopConfigurationProperty<>("fs.gs.debug.logging.enable", false);
+
   // TODO(b/120887495): This @VisibleForTesting annotation was being ignored by prod code.
   // Please check that removing it is correct, and remove this comment along with it.
   // @VisibleForTesting
@@ -441,6 +445,7 @@ public class GoogleHadoopFileSystemConfiguration {
     return GoogleCloudStorageOptions.builder()
         .setStorageRootUrl(GCS_ROOT_URL.get(config, config::get))
         .setStorageServicePath(GCS_SERVICE_PATH.get(config, config::get))
+        .setEnableDebugLogging(GCS_ENABLE_DEBUG_LOGGING.get(config, config::getBoolean))
         .setAutoRepairImplicitDirectoriesEnabled(
             GCS_REPAIR_IMPLICIT_DIRECTORIES_ENABLE.get(config, config::getBoolean))
         .setCopyWithRewriteEnabled(GCS_COPY_WITH_REWRITE_ENABLE.get(config, config::getBoolean))

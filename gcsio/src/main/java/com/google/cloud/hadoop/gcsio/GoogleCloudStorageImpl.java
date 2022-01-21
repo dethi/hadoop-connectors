@@ -103,6 +103,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
@@ -277,6 +279,10 @@ public class GoogleCloudStorageImpl implements GoogleCloudStorage {
   // Function that generates downscoped access token.
   private final Function<List<AccessBoundary>, String> downscopedAccessTokenFn;
 
+  // Google root logger, logger that spans over the <package_shading_prefix>.com.google.* coverage.
+  protected static final Logger googleLogger =
+      Logger.getLogger(GoogleLogger.class.getName().replaceAll("(com\\.google).*", "$1"));
+
   // Watchdog to monitor gRPC streams
   private final Watchdog watchdog;
 
@@ -376,6 +382,12 @@ public class GoogleCloudStorageImpl implements GoogleCloudStorage {
               this.storageOptions, this.backgroundTasksThreadPool, credential);
     }
     this.downscopedAccessTokenFn = downscopedAccessTokenFn;
+
+    boolean isDebugLoggingEnabled = this.storageOptions.isEnableDebugLogging();
+    if (googleLogger.getLevel() == null
+        || isDebugLoggingEnabled != googleLogger.isLoggable(Level.CONFIG)) {
+      googleLogger.setLevel(isDebugLoggingEnabled ? Level.CONFIG : Level.INFO);
+    }
   }
 
   /**

@@ -95,11 +95,14 @@ public abstract class GoogleCloudStorageOptions {
   /** Default setting for GCS HTTP request headers. */
   public static final ImmutableMap<String, String> HTTP_REQUEST_HEADERS_DEFAULT = ImmutableMap.of();
 
+  public static final boolean ENABLE_DEBUG_LOGGING_DEFAULT = false;
+
   public static final GoogleCloudStorageOptions DEFAULT = builder().build();
 
   public static Builder builder() {
     return new AutoValue_GoogleCloudStorageOptions.Builder()
         .setGrpcEnabled(ENABLE_GRPC_DEFAULT)
+        .setEnableDebugLogging(ENABLE_DEBUG_LOGGING_DEFAULT)
         .setTrafficDirectorEnabled(ENABLE_TRAFFIC_DIRECTOR_DEFAULT)
         .setDirectPathPreferred(DIRECT_PATH_PREFERRED_DEFAULT)
         .setStorageRootUrl(STORAGE_ROOT_URL_DEFAULT)
@@ -125,6 +128,8 @@ public abstract class GoogleCloudStorageOptions {
   public abstract Builder toBuilder();
 
   public abstract boolean isGrpcEnabled();
+
+  public abstract boolean isEnableDebugLogging();
 
   public abstract String getGrpcServerAddress();
 
@@ -211,6 +216,8 @@ public abstract class GoogleCloudStorageOptions {
     public abstract Builder setGrpcEnabled(boolean grpcEnabled);
 
     public abstract Builder setGrpcServerAddress(String rootUrl);
+
+    public abstract Builder setEnableDebugLogging(boolean enableDebugLogging);
 
     public abstract Builder setTrafficDirectorEnabled(boolean trafficDirectorEnabled);
 
